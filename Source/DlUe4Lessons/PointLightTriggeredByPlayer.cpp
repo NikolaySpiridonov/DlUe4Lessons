@@ -38,7 +38,10 @@ void APointLightTriggeredByPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	auto PlayerLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+	auto PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
+	FVector PlayerLocation;
+	if (PlayerPawn)
+		PlayerLocation = PlayerPawn->GetActorLocation();
 	auto ActorLocation = GetActorLocation();
 	TextLabel->SetRelativeRotation(UKismetMathLibrary::FindLookAtRotation(ActorLocation, PlayerLocation));
 	TextLabel->AddLocalOffset(FVector(-10.0f, TextLabel->GetTextWorldSize().Y / 2, 50.0f));
@@ -51,7 +54,10 @@ void APointLightTriggeredByPlayer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	//Not the best way to do that in Tick(), cause there are trigger system, but let it be
-	auto PlayerLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+	auto PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
+	FVector PlayerLocation;
+	if (PlayerPawn)
+		PlayerLocation = PlayerPawn->GetActorLocation();
 	auto ActorLocation = GetActorLocation();
 	
 	Light->SetVisibility(

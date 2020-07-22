@@ -16,14 +16,14 @@ APickupThingBase::APickupThingBase()
 		StaticMesh->SetStaticMesh(SphereisualAsset.Object);
 	RootComponent = StaticMesh;
 	StaticMesh->SetGenerateOverlapEvents(true);
-	//StaticMesh->OnComponentHit.AddDynamic(this, &APickupThingBase::OnHit);
+
 }
 
 // Called when the game starts or when spawned
 void APickupThingBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -35,6 +35,11 @@ void APickupThingBase::Tick(float DeltaTime)
 	if (SecondsToDestroy <= 0)
 		Destroy();
 
+}
+
+void APickupThingBase::SetSecondsToDestroy(const float &_SecondsToDestroy)
+{
+	SecondsToDestroy = _SecondsToDestroy;
 }
 
 

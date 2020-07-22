@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "PickupThingBase.generated.h"
 
+//don`t forget to add childs of this class to collection of generator to Spawn
 UCLASS(abstract)
 class DLUE4LESSONS_API APickupThingBase : public AActor
 {
@@ -21,6 +22,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	float SecondsToDestroy = 5;
 
+	UPROPERTY(VisibleAnywhere)
+	class UMaterial *Material;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -31,5 +35,8 @@ public:
 
 	UFUNCTION()
 	virtual void OnPickup(int& PlayerHealth, float& ConstHealthTimer) PURE_VIRTUAL(APickupThingBase::OnPickup);
+
+	UFUNCTION()
+	void SetSecondsToDestroy(const float &_SecondsToDestroy);
 
 };

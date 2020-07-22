@@ -21,7 +21,11 @@ public:
 	UPROPERTY(EditAnywhere, meta = (ClampMin = 0, ClampMax = 100))
 	int HealthDecreasingStepPerSec = 5;
 
+	UPROPERTY()
 	float SecondCounter = 0;
+
+	UPROPERTY()
+	float TimerStopSecsLeft = 0;
 
 protected:
 	// Called when the game starts or when spawned

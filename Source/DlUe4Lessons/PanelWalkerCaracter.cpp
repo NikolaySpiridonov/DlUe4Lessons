@@ -3,14 +3,17 @@
 
 #include "PanelWalkerCaracter.h"
 #include "Math/UnrealMathUtility.h"
+#include "Components/CapsuleComponent.h"
+#include "PickupThingBase.h"
 
 // Sets default values
 APanelWalkerCaracter::APanelWalkerCaracter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	//RootComponent->OnComponentHit.AddDynamic(this, &APanelWalkerCaracter::OnHit);
+	
+	auto comp = GetCapsuleComponent();
+	comp->OnComponentHit.AddDynamic(this, &APanelWalkerCaracter::OnHit);
 }
 
 // Called when the game starts or when spawned
@@ -26,11 +29,26 @@ void APanelWalkerCaracter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	SecondCounter += DeltaTime;
-	if (SecondCounter >= 1)
+	if (TimerStopSecsLeft > 0)
 	{
-		SecondCounter = 0;
-		Health = FMath::Clamp(Health - HealthDecreasingStepPerSec, 0, 100);
+		TimerStopSecsLeft = FMath::Max(TimerStopSecsLeft - DeltaTime, 0.0f);
+		GEngine->AddOnScreenDebugMessage(1, 0.0f, FColor::Yellow, TEXT("Timer stopped"));
+	}
+	else
+	{
+		SecondCounter += DeltaTime;
+		if (SecondCounter >= 1)
+		{
+			SecondCounter = 0;
+			Health = FMath::Clamp(Health - HealthDecreasingStepPerSec, 0, 100);
+		}
+	}
+
+	if (Health == 0)
+	{
+		GEngine->AddOnScreenDebugMessage(0, 10.0f, FColor::Red, TEXT("YOU`RE DEAD"));
+		Destroy();
+		return;
 	}
 
 	FString HealthString = FString::Printf(TEXT("Health: %d"), Health);
@@ -64,7 +82,9 @@ void APanelWalkerCaracter::MoveRight(float Value)
 
 void APanelWalkerCaracter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	bool t = true;
+	auto PickupThing = Cast<APickupThingBase>(OtherActor);
+	if (PickupThing)
+		PickupThing->OnPickup(Health, TimerStopSecsLeft);
 
 }
 

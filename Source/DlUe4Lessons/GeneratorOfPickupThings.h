@@ -28,13 +28,19 @@ public:
 	int MinDistanceToPlayer = 200;
 
 	UPROPERTY(EditAnywhere, meta = (ClampMin = 1, ClampMax = 60))
-	int LifeTime = 5;
+	int PickupThingLifeTime = 5;
+
+	UPROPERTY(EditAnywhere, meta = (ClampMin = 1, ClampMax = 60))
+	int TimerStopDuration = 5;
 
 	UPROPERTY(EditAnywhere, meta = (ClampMin = 100))
 	int MaxSpawnBoundByAxis = 2000;
 
 	UPROPERTY(VisibleAnywhere)
 	TArray<APickupThingBase*> ArraySpawnedThings;
+
+	UPROPERTY(EditAnywhere)
+	TArray<TSubclassOf<class APickupThingBase>> ArrayPickupThingsTypes;
 
 protected:
 	// Called when the game starts or when spawned
